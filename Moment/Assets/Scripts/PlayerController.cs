@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
 	bool stasis = false;
 	bool timerTrigger = false;
 	bool isRewinding = false;
+    bool shifted = false;
     
 	Rigidbody2D rb;
     new SpriteRenderer renderer;
@@ -24,6 +25,9 @@ public class PlayerController : MonoBehaviour {
     bool timeForm = true;
 
 	public KeyCode power1;
+    public KeyCode power2;
+    public KeyCode formShift;
+    public KeyCode jump;
 
 	// Use this for initialization	
 	void Start () {
@@ -38,7 +42,8 @@ public class PlayerController : MonoBehaviour {
         colorChange();
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 		anim.SetBool ("Ground", grounded);
-
+        if (grounded)
+            shifted = false;
 
 		anim.SetFloat ("Speed", GetComponent<Rigidbody2D> ().velocity.y);
 
@@ -49,34 +54,61 @@ public class PlayerController : MonoBehaviour {
 			Flip();
 		else if (move < 0 && facingRight)
 			Flip();
-		if (Input.GetKeyDown(KeyCode.V))
-			isRewinding = true;
-		if (Input.GetKeyUp (KeyCode.V))
-			isRewinding = false;
-		if (isRewinding && !grounded)
-			Rewind();
-		else
-			Record ();
-		}
+
+
+        Power1();
+        Power2();
+    }
 
 	void Update(){
-		if (grounded && Input.GetKeyDown (KeyCode.Space)){
+		if (grounded && Input.GetKeyDown (jump)){
 			anim.SetBool ("Ground", false);
 			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
 
 		}
 
-		if (!doubleJump && !grounded && Input.GetKeyDown (power1)) {
-			doubleJump = true;
-			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
-		}
 
-		if(grounded)
-			doubleJump = false;
-		Stasis ();
-		Fall ();
 
 	}
+    void Power1()
+    {
+        if (timeForm)
+        {
+            Stasis();
+        }
+        else
+            secondJump();
+    }
+
+    void Power2()
+    {
+        if (timeForm)
+        {
+            if (Input.GetKeyDown(power2))
+                isRewinding = true;
+            if (Input.GetKeyUp(power2))
+                isRewinding = false;
+            if (isRewinding && !grounded)
+                Rewind();
+            else
+                Record();
+        }
+        else
+            Fall();
+        
+    }
+
+    void secondJump()
+    {
+        if (!doubleJump && !grounded && Input.GetKeyDown(power1))
+        {
+            doubleJump = true;
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
+        }
+
+        if (grounded)
+            doubleJump = false;
+    }
 
 	void Flip(){
 		facingRight = !facingRight;
@@ -86,7 +118,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Stasis(){
-		if (!grounded && Input.GetKeyDown (KeyCode.S) && !stasis) {
+		if (!grounded && Input.GetKeyDown (power1) && !stasis) {
 			gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 			stasis = true;
 			StartCoroutine(StasisTimer ());
@@ -108,7 +140,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Fall(){
-		if (!grounded && Input.GetKeyDown (KeyCode.X))
+		if (!grounded && Input.GetKeyDown (power2))
 			rb.gravityScale = 10;
 		if (grounded)
 			rb.gravityScale = 1;
@@ -131,14 +163,16 @@ public class PlayerController : MonoBehaviour {
 
     void colorChange()
     {
-        if (Input.GetKeyDown(KeyCode.B) && timeForm){
+        if (Input.GetKey(formShift) && timeForm && !shifted){
             renderer.color = new Color(0f, 0f, 0f, 1f);
             timeForm = false;
+            shifted = true;
         }
-        else if (Input.GetKeyDown(KeyCode.B) && !timeForm)
+        else if (Input.GetKey(formShift) && !timeForm && !shifted)
         {
             renderer.color = new Color(255f, 255f, 255f, 1f);
             timeForm = true;
+            shifted = true;
         }
     }
 
