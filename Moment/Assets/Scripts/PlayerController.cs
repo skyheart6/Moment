@@ -13,10 +13,10 @@ public class PlayerController : MonoBehaviour {
 	bool grounded = false;
 	bool doubleJump = false;
 	bool stasis = false;
-	bool timerTrigger = false;
-	bool isRewinding = false;
+	bool timerTrigger = true;
+	public bool isRewinding = false;
     bool shifted = false;
-    
+    bool rewound = false;
 	Rigidbody2D rb;
     new SpriteRenderer renderer;
 	public Transform groundCheck;
@@ -76,8 +76,10 @@ public class PlayerController : MonoBehaviour {
         {
             Stasis();
         }
-        else
+        else {
             secondJump();
+        }
+            
     }
 
     void Power2()
@@ -86,21 +88,24 @@ public class PlayerController : MonoBehaviour {
         {
             if (Input.GetKeyDown(power2))
                 isRewinding = true;
-            if (Input.GetKeyUp(power2))
+            if (Input.GetKeyUp(power2) || grounded)
                 isRewinding = false;
             if (isRewinding && !grounded)
                 Rewind();
-            else
+            else {
                 Record();
+
+            }
         }
-        else
+        else {
+            Record();
             Fall();
-        
+        }
     }
 
     void secondJump()
     {
-        if (!doubleJump && !grounded && Input.GetKeyDown(power1))
+        if (!doubleJump && !grounded && Input.GetKey(power1))
         {
             doubleJump = true;
             GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
@@ -129,7 +134,7 @@ public class PlayerController : MonoBehaviour {
 			gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
 		}
 
-		if (grounded)
+		if (grounded || !timeForm)
 			stasis = false;
 	}
 
@@ -140,7 +145,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Fall(){
-		if (!grounded && Input.GetKeyDown (power2))
+		if (!grounded && Input.GetKey (power2))
 			rb.gravityScale = 10;
 		if (grounded)
 			rb.gravityScale = 1;
@@ -155,15 +160,12 @@ public class PlayerController : MonoBehaviour {
 		
 		transform.position = position [0];
 		position.RemoveAt (0);
-	}
-
-	public void startRewinding(){
-		isRewinding = true;
+        rewound = true;
 	}
 
     void colorChange()
     {
-        if (Input.GetKey(formShift) && timeForm && !shifted){
+        if (Input.GetKey(formShift) && timeForm && !shifted && timerTrigger){
             renderer.color = new Color(0f, 0f, 0f, 1f);
             timeForm = false;
             shifted = true;
