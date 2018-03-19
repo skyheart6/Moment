@@ -16,12 +16,12 @@ public class PlayerController : MonoBehaviour {
 	bool timerTrigger = false;
 	bool isRewinding = false;
     
-
 	Rigidbody2D rb;
+    new SpriteRenderer renderer;
 	public Transform groundCheck;
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
-
+    bool timeForm = true;
 
 	public KeyCode power1;
 
@@ -29,17 +29,18 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator>();
 		rb = GetComponent<Rigidbody2D> ();
+        renderer = GetComponent<SpriteRenderer>();
 		position = new List<Vector2> ();
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		
+        colorChange();
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 		anim.SetBool ("Ground", grounded);
 
 
-		anim.SetFloat ("vSpeed", GetComponent<Rigidbody2D> ().velocity.y);
+		anim.SetFloat ("Speed", GetComponent<Rigidbody2D> ().velocity.y);
 
 		float move = Input.GetAxis ("Horizontal");
 		anim.SetFloat("Speed", Mathf.Abs (move));
@@ -127,6 +128,20 @@ public class PlayerController : MonoBehaviour {
 	public void startRewinding(){
 		isRewinding = true;
 	}
+
+    void colorChange()
+    {
+        if (Input.GetKeyDown(KeyCode.B) && timeForm){
+            renderer.color = new Color(0f, 0f, 0f, 1f);
+            timeForm = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.B) && !timeForm)
+        {
+            renderer.color = new Color(255f, 255f, 255f, 1f);
+            timeForm = true;
+        }
+    }
+
 }
 
 	
