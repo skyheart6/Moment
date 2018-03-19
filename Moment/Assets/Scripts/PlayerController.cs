@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
 	bool stasis = false;
 	bool timerTrigger = false;
 	bool isRewinding = false;
+    
 
 	Rigidbody2D rb;
 	public Transform groundCheck;
