@@ -176,6 +176,7 @@ public class PlayerController : MonoBehaviour {
             timeForm = true;
             shifted = true;
         }
+        
     }
 
 }
