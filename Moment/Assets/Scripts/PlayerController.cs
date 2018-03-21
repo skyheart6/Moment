@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
 	public float jumpForce = 700f;
 	public bool grounded = false;
 	bool doubleJump = false;
-	bool stasis = false;
+	public bool stasis = false;
 	bool timerTrigger = true;
 	public bool isRewinding = false;
     bool shifted = false;
@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
     bool timeForm = true;
+    public float stasisTimer;
     
 
 
@@ -126,7 +127,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Stasis(){
-		if (!grounded && Input.GetKeyDown (power1) && !stasis) {
+		if (!grounded && Input.GetKey (power1) && !stasis) {
 			gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 			stasis = true;
 			StartCoroutine(StasisTimer ());
@@ -137,14 +138,17 @@ public class PlayerController : MonoBehaviour {
 			gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
 		}
 
-		if (grounded || !timeForm)
+        if ((grounded && stasisTimer == 0) || !timeForm)
 			stasis = false;
 	}
 
 	public IEnumerator StasisTimer(){
 		timerTrigger = false;
-		yield return new WaitForSeconds (3f);
-		timerTrigger = true;
+        stasisTimer = 3.0f;
+        yield return new WaitForSeconds(stasisTimer);
+        
+        stasisTimer = 0f;
+        timerTrigger = true;
 	}
 
 	void Fall(){
