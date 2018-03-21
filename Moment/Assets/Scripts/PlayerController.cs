@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 	
 
-	List<Vector2> position;
+	List<Vector2> positions;
 	public float maxSpeed = 10f;
 	bool facingRight = true;
 	Animator anim;
 	public float jumpForce = 700f;
-	bool grounded = false;
+	public bool grounded = false;
 	bool doubleJump = false;
 	bool stasis = false;
 	bool timerTrigger = true;
@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour {
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
     bool timeForm = true;
+    
+
 
 	public KeyCode power1;
     public KeyCode power2;
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		rb = GetComponent<Rigidbody2D> ();
         renderer = GetComponent<SpriteRenderer>();
-		position = new List<Vector2> ();
+		positions = new List<Vector2> ();
 	}
 
 	// Update is called once per frame
@@ -44,8 +46,9 @@ public class PlayerController : MonoBehaviour {
 		anim.SetBool ("Ground", grounded);
         if (grounded)
             shifted = false;
-
-		anim.SetFloat ("Speed", GetComponent<Rigidbody2D> ().velocity.y);
+        if (!grounded)
+            transform.parent = null;
+        anim.SetFloat ("Speed", GetComponent<Rigidbody2D> ().velocity.y);
 
 		float move = Input.GetAxis ("Horizontal");
 		anim.SetFloat("Speed", Mathf.Abs (move));
@@ -86,15 +89,15 @@ public class PlayerController : MonoBehaviour {
     {
         if (timeForm)
         {
-            if (Input.GetKeyDown(power2))
+            if (Input.GetKey(power2))
                 isRewinding = true;
             if (Input.GetKeyUp(power2) || grounded)
                 isRewinding = false;
             if (isRewinding && !grounded)
                 Rewind();
             else {
+             
                 Record();
-
             }
         }
         else {
@@ -152,14 +155,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Record(){
-		position.Insert (0, transform.position);
+		positions.Insert (0, transform.position);
 
 	}
 
 	void Rewind(){
-		
-		transform.position = position [0];
-		position.RemoveAt (0);
+    
+		transform.position = positions [0];
+		positions.RemoveAt (0);
         rewound = true;
 	}
 
@@ -179,6 +182,16 @@ public class PlayerController : MonoBehaviour {
         
     }
 
-}
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.tag == "MovingPlatform")
+        {
+            transform.parent = other.transform;
+        }
+        else
+            transform.parent = null;
+    }
+   
 
-	
+    }
+
