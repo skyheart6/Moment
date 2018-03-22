@@ -90,14 +90,21 @@ public class PlayerController : MonoBehaviour {
     {
         if (timeForm)
         {
-            if (Input.GetKey(power2))
+            if (Input.GetKeyDown(power2))
                 isRewinding = true;
             if (Input.GetKeyUp(power2) || grounded)
+            {
                 isRewinding = false;
-            if (isRewinding && !grounded)
+                
+            }
+            if (isRewinding && !grounded )
+               
+            {
                 Rewind();
+               
+            }
             else {
-             
+
                 Record();
             }
         }
@@ -167,7 +174,7 @@ public class PlayerController : MonoBehaviour {
     
 		transform.position = positions [0];
 		positions.RemoveAt (0);
-        rewound = true;
+        
 	}
 
     void colorChange()
