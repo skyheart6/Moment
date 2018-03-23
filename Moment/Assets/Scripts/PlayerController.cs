@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 	
 
-	List<Vector2> positions;
+	List<Vector2> playerPositions;
 	public float maxSpeed = 10f;
 	bool facingRight = true;
 	Animator anim;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 	public LayerMask whatIsGround;
     bool timeForm = true;
     public float stasisTimer;
-    
+   
 
 
 	public KeyCode power1;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		rb = GetComponent<Rigidbody2D> ();
         renderer = GetComponent<SpriteRenderer>();
-		positions = new List<Vector2> ();
+		playerPositions = new List<Vector2> ();
 	}
 
 	// Update is called once per frame
@@ -166,14 +166,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Record(){
-		positions.Insert (0, transform.position);
+		playerPositions.Insert (0, transform.position);
 
 	}
 
 	void Rewind(){
     
-		transform.position = positions [0];
-		positions.RemoveAt (0);
+		transform.position = playerPositions [0];
+		playerPositions.RemoveAt (0);
         
 	}
 
