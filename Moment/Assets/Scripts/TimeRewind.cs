@@ -6,7 +6,7 @@ public class TimeRewind : MonoBehaviour {
     public GameObject player;
     public ArrayList playerPositions;
     bool isRewinding = false;
-
+   
 
     void Start () {
         playerPositions = new ArrayList();
@@ -15,7 +15,7 @@ public class TimeRewind : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.X))
         {
             isRewinding = true;
         }
@@ -27,15 +27,28 @@ public class TimeRewind : MonoBehaviour {
 
     void FixedUpdate()
     {
+        //if (!isRewinding)
+        //{
+        //    playerPositions.Add(player.transform.position);
+        //}
+        //else
+        //{
+        //    player.transform.position = (Vector3)playerPositions[playerPositions.Count - 1];
+        //    playerPositions.RemoveAt(playerPositions.Count - 1);
+        //}
+
+    }
+
+    public void Rewind()
+    {
         if (!isRewinding)
         {
             playerPositions.Add(player.transform.position);
         }
-        else
-        {
-            player.transform.position = (Vector3)playerPositions[playerPositions.Count - 1];
-            playerPositions.RemoveAt(playerPositions.Count - 1);
-        }
-
+    }
+    public void Record()
+    {
+        player.transform.position = (Vector3)playerPositions[playerPositions.Count - 1];
+        playerPositions.RemoveAt(playerPositions.Count - 1);
     }
 }

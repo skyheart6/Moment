@@ -9,14 +9,14 @@ public class PlayerController : MonoBehaviour {
 	public float maxSpeed = 10f;
 	bool facingRight = true;
 	Animator anim;
-	public float jumpForce = 700f;
+	public float jumpForce;
 	public bool grounded = false;
 	bool doubleJump = false;
 	public bool stasis = false;
 	bool timerTrigger = true;
 	public bool isRewinding = false;
     bool shifted = false;
-    bool rewound = false;
+    public bool rewound = false;
 	Rigidbody2D rb;
     new SpriteRenderer renderer;
 	public Transform groundCheck;
@@ -24,8 +24,13 @@ public class PlayerController : MonoBehaviour {
 	public LayerMask whatIsGround;
     bool timeForm = true;
     public float stasisTimer;
-   
-
+    public int keyframe = 5;
+    private int frameCounter = 0;
+    private int reverseCounter = 0;
+    private Vector2 currentPosition;
+    private Vector2 previousPosition;
+    private bool firstRun = true;
+    
 
 	public KeyCode power1;
     public KeyCode power2;
@@ -59,9 +64,17 @@ public class PlayerController : MonoBehaviour {
 		else if (move < 0 && facingRight)
 			Flip();
 
-
+        if (grounded)
+        {
+            rewound = false;
+        }
         Power1();
         Power2();
+        if(playerPositions.Count > 128)
+        {
+            playerPositions.RemoveAt(0);
+        }
+
     }
 
 	void Update(){
@@ -90,22 +103,25 @@ public class PlayerController : MonoBehaviour {
     {
         if (timeForm)
         {
-            if (Input.GetKeyDown(power2))
+            if (Input.GetKeyDown(power2) && !rewound)
                 isRewinding = true;
             if (Input.GetKeyUp(power2) || grounded)
             {
                 isRewinding = false;
                 
             }
+            if (!isRewinding && Input.GetKeyUp(power2))
+                rewound = true;
             if (isRewinding && !grounded )
                
             {
-                Rewind();
+               Rewind();
                
             }
             else {
 
                 Record();
+                
             }
         }
         else {
@@ -166,9 +182,42 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Record(){
-		playerPositions.Insert (0, transform.position);
+        if (!isRewinding)
+        {
+            if (frameCounter < keyframe)
+            {
+                frameCounter += 1;
+            }
+            //playerPositions.Insert (0, transform.position);
+            else
+            {
+                frameCounter = 0;
+                playerPositions.Insert(0, transform.position);
+                
+            }
+        }
+        else {
+            if (reverseCounter > 0)
+            {
+                reverseCounter -=1;
+            }
+            else
+            {
+                //transform.position = playerPositions[playerPositions.Count -1];
+                //playerPositions.RemoveAt(playerPositions.Count - 1);
+                reverseCounter = keyframe;
+                RestorePositions();
+            }
+            if (firstRun)
+            {
+                firstRun = false;
+                RestorePositions();
+            }
+            float interpolation = (float)reverseCounter / (float)keyframe;
+            transform.position = Vector2.Lerp(previousPosition, currentPosition, interpolation);
 
-	}
+        }
+    }
 
 	void Rewind(){
     
@@ -201,6 +250,18 @@ public class PlayerController : MonoBehaviour {
         }
         else
             transform.parent = null;
+    }
+
+    void RestorePositions()
+    {
+        int lastIndex = playerPositions.Count - 1;
+        int secondToLastIndex = playerPositions.Count - 2;
+        if (secondToLastIndex >= 0)
+        {
+            currentPosition = (Vector2)playerPositions[lastIndex];
+            previousPosition = (Vector2)playerPositions[secondToLastIndex];
+            playerPositions.RemoveAt(lastIndex);
+        }
     }
    
 
