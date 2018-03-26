@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 	public Transform groundCheck;
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
-    bool timeForm = true;
+    bool timeForm = false;
     public float stasisTimer;
     public int keyframe = 5;
     private int frameCounter = 0;
@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour {
         if (grounded)
         {
             rewound = false;
+            rb.gravityScale = 1;
         }
         Power1();
         Power2();
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (timeForm)
         {
-            if (Input.GetKeyDown(power2) && !rewound)
+            if (Input.GetKey(power2) && !rewound)
                 isRewinding = true;
             if (Input.GetKeyUp(power2) || grounded)
             {
@@ -152,14 +153,16 @@ public class PlayerController : MonoBehaviour {
 	void Stasis(){
 		if (!grounded && Input.GetKey (power1) && !stasis) {
 			gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-			stasis = true;
+            gameObject.transform.GetComponent<Rigidbody2D>().simulated = false;
+            stasis = true;
 			StartCoroutine(StasisTimer ());
 		}
 
 		if (stasis && timerTrigger) {
 			
 			gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
-		}
+            gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+        }
 
         if ((grounded && stasisTimer == 0) || !timeForm)
 			stasis = false;
@@ -177,8 +180,7 @@ public class PlayerController : MonoBehaviour {
 	void Fall(){
 		if (!grounded && Input.GetKey (power2))
 			rb.gravityScale = 10;
-		if (grounded)
-			rb.gravityScale = 1;
+		
 	}
 
 	void Record(){
