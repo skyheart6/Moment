@@ -222,9 +222,11 @@ public class PlayerController : MonoBehaviour {
     }
 
 	void Rewind(){
-    
-		transform.position = playerPositions [0];
-		playerPositions.RemoveAt (0);
+        if (playerPositions.Count != 0)
+        {
+            transform.position = playerPositions[0];
+            playerPositions.RemoveAt(0);
+        }
         
 	}
 
