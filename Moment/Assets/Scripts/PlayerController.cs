@@ -71,10 +71,10 @@ public class PlayerController : MonoBehaviour {
         }
         Power1();
         Power2();
-        if (playerPositions.Count > 128)
-        {
-            playerPositions.RemoveRange(0,20);
-        }
+        //if (playerPositions.Count > 128)
+        //{
+        //    playerPositions.RemoveRange(0,20);
+        //}
 
     }
 
@@ -105,24 +105,37 @@ public class PlayerController : MonoBehaviour {
         if (timeForm)
         {
             if (Input.GetKey(power2) && !rewound)
+            {
                 isRewinding = true;
+                
+            }
+                
             if (Input.GetKeyUp(power2) || grounded)
             {
                 isRewinding = false;
-                
+              
             }
             if (!isRewinding && Input.GetKeyUp(power2))
+            {
                 rewound = true;
-            if (isRewinding && !grounded )
+            }
+
+            if (isRewinding && !grounded)
                
             {
-               Rewind();
-               
+                //gameObject.transform.GetComponent<Rigidbody2D>().simulated = false;
+                Rewind();
+                //gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                
+
             }
             else {
-
+                //gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
                 Record();
+                transform.tag = "Player";
                 
+                /*gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic*/
+                ;
             }
         }
         else {
@@ -152,7 +165,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Stasis(){
 		if (!grounded && Input.GetKey (power1) && !stasis) {
-			gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+			//gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             gameObject.transform.GetComponent<Rigidbody2D>().simulated = false;
             stasis = true;
 			StartCoroutine(StasisTimer ());
@@ -160,7 +173,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (stasis && timerTrigger) {
 			
-			gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
+			//gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
             gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
         }
 
@@ -233,6 +246,7 @@ public class PlayerController : MonoBehaviour {
         {
             transform.position = playerPositions[0];
             playerPositions.RemoveAt(0);
+            transform.tag = "Untagged";
         }
         
 	}
@@ -243,6 +257,7 @@ public class PlayerController : MonoBehaviour {
             renderer.color = new Color(0f, 0f, 0f, 1f);
             timeForm = false;
             shifted = true;
+            gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
         }
         else if (Input.GetKey(formShift) && !timeForm && !shifted)
         {
