@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private Vector2 currentPosition;
     private Vector2 previousPosition;
     private bool firstRun = true;
-    
+    public int count;
 
 	public KeyCode power1;
     public KeyCode power2;
@@ -71,9 +71,9 @@ public class PlayerController : MonoBehaviour {
         }
         Power1();
         Power2();
-        if(playerPositions.Count > 128)
+        if (playerPositions.Count > 128)
         {
-            playerPositions.RemoveAt(0);
+            playerPositions.RemoveRange(0,20);
         }
 
     }
@@ -84,8 +84,8 @@ public class PlayerController : MonoBehaviour {
 			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
 
 		}
-
-
+      
+        count = playerPositions.Count;
 
 	}
     void Power1()
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour {
 
 	public IEnumerator StasisTimer(){
 		timerTrigger = false;
-        stasisTimer = 3.0f;
+        stasisTimer = 1.8f;
         yield return new WaitForSeconds(stasisTimer);
         
         stasisTimer = 0f;
@@ -184,6 +184,13 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Record(){
+        //if (playerPositions.Count > 128)
+        //{
+        //    playerPositions.RemoveAt(0);
+        //    playerPositions.RemoveAt(1);
+        //    playerPositions.RemoveAt(2);
+        //    playerPositions.RemoveAt(3);
+        //}
         if (!isRewinding)
         {
             if (frameCounter < keyframe)
@@ -267,7 +274,15 @@ public class PlayerController : MonoBehaviour {
             playerPositions.RemoveAt(lastIndex);
         }
     }
-   
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.tag == "Death" || other.transform.tag == "Respawn")
+        {
+            playerPositions.Clear();
+        }
     }
+
+
+}
 
