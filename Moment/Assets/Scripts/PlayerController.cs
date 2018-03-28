@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 	
@@ -31,22 +32,44 @@ public class PlayerController : MonoBehaviour {
     private Vector2 previousPosition;
     private bool firstRun = true;
     public int count;
+    public Text power1Text, power2Text, formShiftText, jumpText;
+    private Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
+    public string testText;
+    KeyCode power1;
+    KeyCode power2;
+    KeyCode formShift;
+    KeyCode jump;
+    private GameObject currentKey;
+    bool paused = false;
 
-	public KeyCode power1;
-    public KeyCode power2;
-    public KeyCode formShift;
-    public KeyCode jump;
 
-	// Use this for initialization	
-	void Start () {
+    // Use this for initialization	
+    void Start () {
 		anim = GetComponent<Animator>();
 		rb = GetComponent<Rigidbody2D> ();
         renderer = GetComponent<SpriteRenderer>();
 		playerPositions = new List<Vector2> ();
-	}
+        keys.Add("Power 1", KeyCode.Z);
+        keys.Add("Power 2", KeyCode.X);
+        keys.Add("Form Shift", KeyCode.C);
+        keys.Add("Jump", KeyCode.Space);
 
-	// Update is called once per frame
-	void FixedUpdate () {
+        power1Text.text = keys["Power 1"].ToString();
+        testText = keys["Power 1"].ToString();
+        power2Text.text = keys["Power 2"].ToString();
+        formShiftText.text = keys["Form Shift"].ToString();
+        jumpText.text = keys["Jump"].ToString();
+
+        power1 = keys["Power 1"];
+        power2 = keys["Power 2"];
+        formShift = keys["Form Shift"];
+        jump = keys["Jump"];
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
+        
         colorChange();
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 		anim.SetBool ("Ground", grounded);
@@ -79,7 +102,10 @@ public class PlayerController : MonoBehaviour {
     }
 
 	void Update(){
-		if (grounded && Input.GetKeyDown (jump)){
+
+
+        
+        if (grounded && Input.GetKeyDown (jump)){
 			anim.SetBool ("Ground", false);
 			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
 
@@ -142,6 +168,7 @@ public class PlayerController : MonoBehaviour {
             Record();
             Fall();
         }
+        ChangeKey();
     }
 
     void secondJump()
@@ -296,6 +323,25 @@ public class PlayerController : MonoBehaviour {
         {
             playerPositions.Clear();
         }
+    }
+
+    public void ChangeKey()
+    {
+        if (currentKey != null)
+        {
+            Event e = Event.current;
+            if (e.isKey)
+            {
+                keys[currentKey.name] = e.keyCode;
+                currentKey.transform.GetChild(0).GetComponent<Text>().text = e.keyCode.ToString();
+                currentKey = null;
+            }
+        }
+    }
+
+    public void ChangeKey(GameObject clicked)
+    {
+        currentKey = clicked;
     }
 
 
