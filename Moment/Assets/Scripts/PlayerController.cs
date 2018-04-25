@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour {
 	public Transform groundCheck;
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
-    bool timeForm = false;
+    public bool timeForm = false;
     public float stasisTimer;
     public int keyframe = 5;
     private int frameCounter = 0;
@@ -201,7 +201,8 @@ public class PlayerController : MonoBehaviour {
 		if (stasis && timerTrigger) {
 			
 			//gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
-            gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+            //gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+			gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
         }
 
         if ((grounded && stasisTimer == 0) || !timeForm)
@@ -211,8 +212,9 @@ public class PlayerController : MonoBehaviour {
 	public IEnumerator StasisTimer(){
 		timerTrigger = false;
         stasisTimer = 1.8f;
+		renderer.color = new Color(100f, 0f, 0f, 1f);
         yield return new WaitForSeconds(stasisTimer);
-        
+		renderer.color = new Color(255f, 255f, 255f, 1f);
         stasisTimer = 0f;
         timerTrigger = true;
 	}
