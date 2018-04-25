@@ -198,10 +198,9 @@ public class PlayerController : MonoBehaviour {
 			StartCoroutine(StasisTimer ());
 		}
 
-		if (stasis && timerTrigger) {
+		if (stasis && timerTrigger && !gameObject.transform.GetComponent<Rigidbody2D>().simulated) {
 			
 			//gameObject.transform.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
-            //gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
 			gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
         }
 
