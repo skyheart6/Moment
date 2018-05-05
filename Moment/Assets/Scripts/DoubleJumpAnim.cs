@@ -23,7 +23,7 @@ public class DoubleJumpAnim : MonoBehaviour {
 		timeForm = playerController.timeForm; 
 		grounded = playerController.grounded;
 		if (!doubleJumped && !grounded) {
-			if (Input.GetKeyDown (KeyCode.Z) && !timeForm) {
+			if (Input.GetKey (KeyCode.Z) && !timeForm) {
 				anim.SetActive (true);
 				StartCoroutine (AnimTimer ());
 				doubleJumped = true;
