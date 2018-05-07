@@ -210,7 +210,7 @@ public class PlayerController : MonoBehaviour {
 
 	public IEnumerator StasisTimer(){
 		timerTrigger = false;
-        stasisTimer = 1.8f;
+        stasisTimer = 1f;
 		renderer.color = new Color(100f, 0f, 0f, 1f);
         yield return new WaitForSeconds(stasisTimer);
 		renderer.color = new Color(255f, 255f, 255f, 1f);

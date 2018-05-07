@@ -152,7 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294965247
   speed: 2
 --- !u!212 &212042912162717936
 SpriteRenderer:
