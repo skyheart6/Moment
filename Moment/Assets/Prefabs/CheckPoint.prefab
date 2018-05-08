@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4538900006161578}
   - component: {fileID: 212030494147971930}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: star1Red_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4849051204627850}
   - component: {fileID: 114165536053846986}
   - component: {fileID: 58292712131812430}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: CheckPoint
   m_TagString: Respawn
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -64,8 +64,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1595660833950562}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.90368, y: -2.6, z: -0.5703125}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalPosition: {x: -32.4, y: 4.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4538900006161578}
   m_Father: {fileID: 0}
