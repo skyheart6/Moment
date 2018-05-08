@@ -10,8 +10,8 @@ public class PlayerUnderCheck : MonoBehaviour {
     public float distanceLimit;
 	// Use this for initialization
 	void Start () {
-        distanceLimit = 2.0f;
 
+        
     }
 
     // Update is called once per frame

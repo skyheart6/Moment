@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour {
     KeyCode formShift;
     KeyCode jump;
     private GameObject currentKey;
+    public GameObject keyBindManager;
     bool paused = false;
 
 
@@ -69,7 +70,13 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
-        
+        //KeyBind keybind = keyBindManager.GetComponent<KeyBind>();
+        //power1Text = keybind.power1;
+        //power1Text.text = keys["Power 1"].ToString();
+        //testText = keys["Power 1"].ToString();
+        //power1 = keys["Power 1"];
+
+
         colorChange();
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 		anim.SetBool ("Ground", grounded);

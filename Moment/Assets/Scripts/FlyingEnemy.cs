@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlyingEnemy : MonoBehaviour
 {
     Rigidbody2D myBody;
-    public LayerMask enemyMask,playerMask;
+    public LayerMask enemyMask;
     public float speed = 1f;
     Transform myTrans;
     float myWidth, myHeight;
@@ -13,7 +13,7 @@ public class FlyingEnemy : MonoBehaviour
     public bool under;
     PlayerUnderCheck underCheck;
     public bool wasGrounded;
-    public float riseTimer = 2.0f;
+    public float riseTimer;
     void Start()
     {
         myTrans = this.transform;

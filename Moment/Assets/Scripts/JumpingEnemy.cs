@@ -8,7 +8,10 @@ public class JumpingEnemy : MonoBehaviour
     public LayerMask enemyMask;
     public float speed = 1f;
     Transform myTrans;
-    float myWidth, myHeight, jumpForce;
+    float myWidth, myHeight;
+    public float jumpForce;
+    bool jump;
+    float jumpTimer = .5f;
 
     void Start()
     {
@@ -17,11 +20,17 @@ public class JumpingEnemy : MonoBehaviour
         SpriteRenderer mySprite = this.GetComponent<SpriteRenderer>();
         myWidth = mySprite.bounds.extents.x;
         myHeight = mySprite.bounds.extents.y;
-        jumpForce = 300.0f;
+        jump = false;
+
+        
     }
 
     void FixedUpdate()
     {
+        if (!jump)
+        {
+            StartCoroutine(JumpTimer());
+        }
         //Check to see if there's in front of us before moving forward 
         Vector2 lineCastPos = myTrans.position.toVector2() - myTrans.right.toVector2() * myWidth + Vector2.up * myHeight;
         Debug.DrawLine(lineCastPos, lineCastPos + Vector2.down);
@@ -29,7 +38,7 @@ public class JumpingEnemy : MonoBehaviour
         bool isBlocked = Physics2D.Linecast(lineCastPos, lineCastPos - myTrans.right.toVector2() * .05f, enemyMask);
         //if there's no ground or you are blocked, turn around
     
-        if (isGrounded)
+        if (isGrounded && jump)
         {
             GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
 
@@ -48,5 +57,10 @@ public class JumpingEnemy : MonoBehaviour
         myBody.velocity = myVel;
 
     }
-
+    public IEnumerator JumpTimer()
+    {
+        jump = true;
+        yield return new WaitForSeconds(jumpTimer);
+        jump = false;
+    }
 }
