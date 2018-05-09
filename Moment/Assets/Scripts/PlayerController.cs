@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-	
 
-	List<Vector2> playerPositions;
+    public AudioSource jumpAudio;
+    public AudioSource doubleJumpAudio;
+    List<Vector2> playerPositions;
 	public float maxSpeed = 10f;
 	bool facingRight = true;
 	Animator anim;
@@ -115,6 +116,7 @@ public class PlayerController : MonoBehaviour {
         if (grounded && Input.GetKeyDown (jump)){
 			anim.SetBool ("Ground", false);
 			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
+            jumpAudio.Play();
 
 		}
       
@@ -184,6 +186,8 @@ public class PlayerController : MonoBehaviour {
         {
             doubleJump = true;
             GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
+            doubleJumpAudio.Play();
+
         }
 
         if (grounded)

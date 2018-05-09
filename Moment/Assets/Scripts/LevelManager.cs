@@ -29,7 +29,7 @@ public class LevelManager : MonoBehaviour {
     public void BossFollow()
     {
         Debug.Log("Player Respawn");
-        boss.transform.position = currentCheckpoint.transform.position - new Vector3(15,0,0);
+        boss.transform.position = currentCheckpoint.transform.position - new Vector3(22,0,0);
     }
 
     public void nextLevel()

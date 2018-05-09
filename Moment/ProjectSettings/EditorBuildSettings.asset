@@ -15,3 +15,5 @@ EditorBuildSettings:
     path: Assets/TestLevel3.unity
   - enabled: 1
     path: Assets/FinalLevel.unity
+  - enabled: 1
+    path: Assets/Finale.unity
