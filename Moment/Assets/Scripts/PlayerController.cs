@@ -292,19 +292,38 @@ public class PlayerController : MonoBehaviour {
 
     void colorChange()
     {
-        if (Input.GetKey(formShift) && timeForm && !shifted && timerTrigger){
-            renderer.color = new Color(0f, 0f, 0f, 1f);
-            timeForm = false;
-            shifted = true;
-            gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+        if (!grounded){
+            if (Input.GetKey(formShift) && timeForm && !shifted && timerTrigger) {
+                renderer.color = new Color(0f, 0f, 0f, 1f);
+                timeForm = false;
+                shifted = true;
+                gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+            }
+
+            else if (Input.GetKey(formShift) && !timeForm && !shifted)
+            {
+                renderer.color = new Color(255f, 255f, 255f, 1f);
+                timeForm = true;
+                shifted = true;
+            }
         }
-        else if (Input.GetKey(formShift) && !timeForm && !shifted)
-        {
-            renderer.color = new Color(255f, 255f, 255f, 1f);
-            timeForm = true;
-            shifted = true;
+        if (grounded){
+            if (Input.GetKeyDown(formShift) && timeForm && !shifted && timerTrigger)
+            {
+                renderer.color = new Color(0f, 0f, 0f, 1f);
+                timeForm = false;
+                shifted = true;
+                gameObject.transform.GetComponent<Rigidbody2D>().simulated = true;
+            }
+
+            else if (Input.GetKeyDown(formShift) && !timeForm && !shifted)
+            {
+                renderer.color = new Color(255f, 255f, 255f, 1f);
+                timeForm = true;
+                shifted = true;
+            }
         }
-        
+
     }
 
     void OnCollisionEnter2D(Collision2D other)
